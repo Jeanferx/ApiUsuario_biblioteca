@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
-import java.util.Date;
-import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,26 +10,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.UserModel;
+import com.example.demo.service.UserService;
 
 @RestController
 @RequestMapping
 public class UserController {
+	//Esta anotacion se llama autowired y es para indicarle a spring que va a inyectar un bean 
+	//de tipo UserService
+	@Autowired
+	private UserService userService;
 
 	@GetMapping("/users/{userId}")
 	public UserModel getUserById(@PathVariable("userId") String userId) {
-		UserModel userModel = new UserModel();
-		System.out.println("Peticion de obtener el user con id " + userId);
-		
-		userModel.setId(userId);
-		userModel.setName("Jean");
-		userModel.setDateOfBirth(new Date());
-		return userModel;
+		return userService.getUserById(userId);
 	}
 
 	@PostMapping("/users")
 	public UserModel createUser(@RequestBody UserModel user) {
-		System.out.println("Creando un usuario nuevo");
-		user.setId(UUID.randomUUID().toString());
-		return user;
+		return userService.createUser(user);
+	}
+	
+	//GETTERS Y SETTERS
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 }
