@@ -51,4 +51,13 @@ public class UserServiceImpl implements UserService{
 	    System.out.println("Actualizando usuario con ID: " + userId);
 	    return userDao.updateUser(userId, user);
 	}
+	@Override
+	@Transactional
+	public UserModel deleteUser(String userId) {
+		UserModel userModel = new UserModel();
+	    System.out.println("Eliminando usuario con ID: " + userId);
+	    return userDao.deleteUser(userId);
+	}
+
+
 }

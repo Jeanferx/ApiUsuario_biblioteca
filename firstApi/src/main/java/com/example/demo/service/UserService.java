@@ -10,4 +10,6 @@ public interface UserService {
 	UserModel createUser(UserModel user);
 	
 	UserModel updateUser(String userId, UserModel user);
+	
+	UserModel deleteUser(String userId);
 }

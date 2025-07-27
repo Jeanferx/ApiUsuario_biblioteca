@@ -42,6 +42,27 @@ public class UserDaoImpl implements UserDao{
 	        throw new RuntimeException("Usuario no encontrado con ID: " + userId);
 	    }
 	}
+	@Override
+	public UserModel deleteUser(String userId) {
+		UserModel model = new UserModel();
+	    Optional<UserEntity> existingUser = repository.findById(userId);
+	    if (existingUser.isPresent()) {
+	        UserEntity userEntity = existingUser.get();
+
+	        UserModel userModel = new UserModel();
+	        userModel.setId(userEntity.getId());
+	        userModel.setName(userEntity.getName());
+	        userModel.setDateOfBirth(userEntity.getDateOfBirth());
+
+	        repository.deleteById(userId);
+
+	        return userModel;
+	    }
+	    return null;
+	}
+
+
+
 
 
 	@Override
