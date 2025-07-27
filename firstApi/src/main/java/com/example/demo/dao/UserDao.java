@@ -7,5 +7,7 @@ public interface UserDao {
 	UserModel getUserById(String userId);
 	
 	UserModel createUser(UserModel user);
+	
+	UserModel updateUser (String userId, UserModel user);
 
 }

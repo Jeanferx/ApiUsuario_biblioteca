@@ -8,4 +8,6 @@ public interface UserService {
 	UserModel getUserById(String userId);
 	
 	UserModel createUser(UserModel user);
+	
+	UserModel updateUser(String userId, UserModel user);
 }

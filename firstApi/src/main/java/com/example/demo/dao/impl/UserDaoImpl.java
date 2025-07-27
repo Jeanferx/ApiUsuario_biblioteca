@@ -27,6 +27,22 @@ public class UserDaoImpl implements UserDao{
 		}
 		return model;
 	}
+	@Override
+	public UserModel updateUser(String userId, UserModel user) {
+	    Optional<UserEntity> existingUser = repository.findById(userId);
+	    if (existingUser.isPresent()) {
+	        UserEntity userEntity = existingUser.get();
+	        userEntity.setName(user.getName());
+	        userEntity.setDateOfBirth(user.getDateOfBirth());
+	        repository.save(userEntity);
+
+	        user.setId(userId);
+	        return user;
+	    } else {
+	        throw new RuntimeException("Usuario no encontrado con ID: " + userId);
+	    }
+	}
+
 
 	@Override
 	public UserModel createUser(UserModel user) {
@@ -39,7 +55,7 @@ public class UserDaoImpl implements UserDao{
 		
 		return user;
 	}
-	
+
 	public UserDaoImpl(UserRepository repository) {
 		this.repository = repository;
 	}

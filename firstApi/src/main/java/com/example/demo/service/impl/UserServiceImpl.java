@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dao.UserDao;
+import com.example.demo.dao.jpa.entity.UserEntity;
 import com.example.demo.dao.jpa.repository.UserRepository;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
@@ -44,5 +45,10 @@ public class UserServiceImpl implements UserService{
 		System.out.println("Creando un usuario nuevo");
 		return userDao.createUser(user);
 	}
-
+	@Override
+	@Transactional
+	public UserModel updateUser(String userId, UserModel user) {
+	    System.out.println("Actualizando usuario con ID: " + userId);
+	    return userDao.updateUser(userId, user);
+	}
 }
