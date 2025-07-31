@@ -1,21 +1,41 @@
-package com.example.demo.model;
+package com.example.demo.controller.dto.request;
 
 import java.util.Date;
 
-public class UserModel {
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
-	private String id;
+
+public class CreateUserDTO {
+
+	@NotEmpty
+	@Size(max =50)
 	private String name;
+	
+	@NotNull
+	@Past
 	private Date dateOfBirth;
+	
+	@NotEmpty
+	@Size(max = 50)
 	private String email;
+	
+	@NotEmpty
+	@Size(max = 20)
 	private String passwd;
 	
-	public String getId() {
-		return id;
+	public CreateUserDTO(){}
+	
+	public CreateUserDTO(String name, Date dateOfBirth, String email, String passwd) {
+		this.name = name;
+		this.dateOfBirth = dateOfBirth;
+		this.email = email;
+		this.passwd = passwd;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
+	
+	
 	public String getName() {
 		return name;
 	}
