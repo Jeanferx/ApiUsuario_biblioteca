@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dao.UserDao;
 import com.example.demo.dao.jpa.entity.UserEntity;
 import com.example.demo.dao.jpa.repository.UserRepository;
+import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.UserModel;
 
 @Service
@@ -20,10 +21,17 @@ public class UserDaoImpl implements UserDao{
 	public UserModel getUserById(String userId) {
 		Optional<UserEntity> e = repository.findById(userId);
 		UserModel model = new UserModel();
+		
 		if (e.isPresent()) {
 			model.setId(e.get().getId());
 			model.setDateOfBirth(e.get().getDateOfBirth());
 			model.setName(e.get().getName());
+			model.setEmail(e.get().getEmail());
+			model.setPasswd(e.get().getPasswd());
+		}else {
+			//Si no hay user entonces que lance una excepcion controlada de tipo UserNotFoundException
+			String errorMsg = "The user with id %s was not found";
+			throw new UserNotFoundException(String.format(errorMsg, userId));
 		}
 		return model;
 	}
@@ -70,6 +78,8 @@ public class UserDaoImpl implements UserDao{
 		UserEntity userEntity = new UserEntity();
 		userEntity.setDateOfBirth(user.getDateOfBirth());
 		userEntity.setName(user.getName());
+		userEntity.setEmail(user.getEmail());
+		userEntity.setPasswd(user.getPasswd());
 		
 		userEntity = repository.save(userEntity);
 		user.setId(userEntity.getId());

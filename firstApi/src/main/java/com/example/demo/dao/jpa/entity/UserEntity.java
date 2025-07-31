@@ -20,13 +20,17 @@ public class UserEntity {
 	private String id;
 	private String name;
 	private Date dateOfBirth;
+	private String email;
+	private String passwd;
 	
 	public UserEntity() {}
 	
-	public UserEntity(String id, String name, Date dateOfBirth) {
+	public UserEntity(String id, String name, Date dateOfBirth, String email, String passwd) {
 		this.id = id;
 		this.name = name;
 		this.dateOfBirth = dateOfBirth;
+		this.email = email;
+		this.passwd = passwd;
 	}
 	
 	public String getId() {
@@ -46,6 +50,22 @@ public class UserEntity {
 	}
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPasswd() {
+		return passwd;
+	}
+
+	public void setPasswd(String passwd) {
+		this.passwd = passwd;
 	}
 	
 	

@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,15 +17,15 @@ import com.example.demo.service.UserService;
 @Service
 public class UserServiceImpl implements UserService{
 
-    private final UserRepository userRepository;
-	
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
-	public UserServiceImpl(UserDao userDao, UserRepository userRepository) {
+	public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
 		super();
 		this.userDao = userDao;
-		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	//esta anotacion le dice que va a implementar el metodo de la interfaz o una clase padre
@@ -43,6 +44,11 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	public UserModel createUser(UserModel user) {
 		System.out.println("Creando un usuario nuevo");
+		
+		System.out.println("Agregamos un poco de logica, vamos a hashear la contrasena");
+		String hashedPass = passwordEncoder.encode(user.getPasswd());
+		user.setPasswd(hashedPass);
+		
 		return userDao.createUser(user);
 	}
 	@Override
