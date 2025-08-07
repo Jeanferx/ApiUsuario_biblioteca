@@ -10,7 +10,8 @@ import com.example.demo.dao.jpa.entity.UserEntity;
 import com.example.demo.dao.jpa.repository.UserRepository;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.UserModel;
-
+import java.util.List;
+import java.util.ArrayList;
 @Service
 public class UserDaoImpl implements UserDao{
 	
@@ -52,6 +53,23 @@ public class UserDaoImpl implements UserDao{
 	        throw new RuntimeException("Usuario no encontrado con ID: " + userId);
 	    }
 	}
+	@Override
+	public List<UserModel> getAllUsers() {
+        List<UserEntity> entities = repository.findAll();
+        List<UserModel> models = new ArrayList<>();
+
+        for (UserEntity e : entities) {
+            UserModel model = new UserModel();
+            model.setId(e.getId());
+            model.setDateOfBirth(e.getDateOfBirth());
+            model.setName(e.getName());
+            model.setEmail(e.getEmail());
+            model.setPasswd(e.getPasswd());
+            models.add(model);
+        }
+        return models;
+    }
+
 	@Override
 	public UserModel deleteUser(String userId) {
 		UserModel model = new UserModel();

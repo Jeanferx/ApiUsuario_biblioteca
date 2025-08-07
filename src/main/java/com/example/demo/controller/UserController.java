@@ -16,6 +16,8 @@ import com.example.demo.controller.dto.response.CreateUserResponseDTO;
 import com.example.demo.controller.mapper.UserControllerMapper;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
+import java.util.List;
+
 
 import jakarta.validation.Valid;
 
@@ -28,31 +30,30 @@ public class UserController {
 	private UserService userService;
 	@Autowired
 	private UserControllerMapper mapper;
+	//BUSCAR Y MOSTRAR TODOS LOS USUARIOS
+	@GetMapping
+	public List<UserModel> getAllUsers() {
+	    return userService.getAllUsers();
+	}
 
+	//BUSCAR Y MOSTRAR USUARIO
 	@GetMapping("/{userId}")
 	public UserModel getUserById(@PathVariable("userId") String userId) {
 		return userService.getUserById(userId);
 	}
 
-	//@PostMapping("/users")
-	/*public CreateUserResponseDTO createUser(@Valid @RequestBody CreateUserDTO user) {
-		
-		 * El objeto DTO en este caso solo nos sirve en el controller para enviar y recibir informacion
-		 * para mover la informacion internamente usamos el model
-		 * 
-		UserModel model = userService.createUser(mapper.dtoToModel(user));
-		return mapper.modelToDto(model);
-	}*/
-	//ME DICE QUE EXISTE ERROR POR USAR EL /USERS EN EL POSTMAPPING
+	//CREAR USUARIO
 	@PostMapping  // <- Ahora la ruta será POST /users (correcto)
 	public CreateUserResponseDTO createUser(@Valid @RequestBody CreateUserDTO user) {
 	    UserModel model = userService.createUser(mapper.dtoToModel(user));
 	    return mapper.modelToDto(model);
 	}
+	//EDITAR USUARIO
 	@PutMapping("/{userId}")
 	public UserModel updateUser(@PathVariable("userId") String userId, @RequestBody UserModel user) {
         return userService.updateUser(userId, user);
     }
+	//ELIMINAR USUARIO
 	@DeleteMapping("/{userId}")
 	public UserModel deleteUser(@PathVariable("userId") String userId) {
 	    return userService.deleteUser(userId);

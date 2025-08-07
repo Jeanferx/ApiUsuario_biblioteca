@@ -12,6 +12,7 @@ import com.example.demo.dao.jpa.entity.UserEntity;
 import com.example.demo.dao.jpa.repository.UserRepository;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
+import java.util.List;
 
 //esta anotacion le dice a esta clase que es un bean de spring
 @Service
@@ -27,6 +28,8 @@ public class UserServiceImpl implements UserService{
 		this.userDao = userDao;
 		this.passwordEncoder = passwordEncoder;
 	}
+	
+
 
 	//esta anotacion le dice que va a implementar el metodo de la interfaz o una clase padre
 	//esta anotacion no es obligatoria pero es buenas practicas
@@ -70,5 +73,12 @@ public class UserServiceImpl implements UserService{
 	    return userDao.deleteUser(userId);
 	}
 
+	@Override
+    public List<UserModel> getAllUsers() {
+        System.out.println("Obteniendo todos los usuarios");
+        return userDao.getAllUsers();
+    }
+
+	//AQUI MODIFICANDO
 
 }

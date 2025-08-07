@@ -1,6 +1,7 @@
 package com.example.demo.dao;
 
 import com.example.demo.model.UserModel;
+import java.util.List;
 
 
 public interface UserDao {
@@ -12,4 +13,6 @@ public interface UserDao {
 	UserModel updateUser(String userId, UserModel user);
 
 	UserModel deleteUser(String userId);
+
+	List<UserModel> getAllUsers();
 }
