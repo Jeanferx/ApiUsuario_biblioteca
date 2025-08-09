@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class TipoUserModel {
     private String id;
-    private String userTipo;
+    private String tipousuario;
 }

@@ -5,7 +5,6 @@ import com.example.demo.controller.dto.response.CreateUserResponseDTO;
 import com.example.demo.model.UserModel;
 
 public interface UserControllerMapper {
-	
 	UserModel dtoToModel(CreateUserDTO dto);
 	
 	CreateUserResponseDTO modelToDto(UserModel model);

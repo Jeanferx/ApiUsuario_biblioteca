@@ -13,7 +13,6 @@ import com.example.demo.model.UserModel;
  * */
 @Component
 public class UserControllerMapperImpl implements UserControllerMapper {
-
 	@Override
 	public UserModel dtoToModel(CreateUserDTO dto) {
 		if(dto == null)

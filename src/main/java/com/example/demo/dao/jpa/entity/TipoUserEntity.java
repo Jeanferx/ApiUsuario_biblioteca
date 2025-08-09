@@ -13,6 +13,8 @@ public class TipoUserEntity {
     @Id
     private String id;
 
-    private String userTipo;
+    private String tipousuario;
 
 }
+
+
