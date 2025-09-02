@@ -15,4 +15,5 @@ public interface UserDao {
 	UserModel deleteUser(String userId);
 
 	List<UserModel> getAllUsers();
+	
 }

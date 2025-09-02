@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.example.demo.exception.EmailAlreadyExistsException;
 import com.example.demo.exception.ErrorMessage;
 import com.example.demo.exception.UserNotFoundException;
 
@@ -43,4 +44,10 @@ public class RestControllerAdviceImpl {
 		errorMessage.setMessages(errorList);
 		return errorMessage;
 	}
+	@ExceptionHandler({EmailAlreadyExistsException.class})
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public ErrorMessage handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
+	    return new ErrorMessage(List.of(ex.getMessage()));
+	}
+
 }

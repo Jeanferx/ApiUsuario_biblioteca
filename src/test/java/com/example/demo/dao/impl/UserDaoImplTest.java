@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.demo.dao.UserDao;
 import com.example.demo.dao.jpa.entity.UserEntity;
 import com.example.demo.dao.jpa.repository.UserRepository;
+import com.example.demo.exception.EmailAlreadyExistsException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.UserModel;
 
@@ -41,13 +42,33 @@ public class UserDaoImplTest {
 		//si la clase userDao tuviera mas parametros se tendrian que pasar en el constructor
 		userDao = new UserDaoImpl(userRepository);
 	}
-	
+	@Test
+	void createUser_test_emailAlreadyExists() {
+	    // 1️⃣ Creamos un UserModel de prueba usando los datos existentes
+	    UserModel user = new UserModel();
+	    user.setName(USER_NAME);
+	    user.setEmail(USER_EMAIL); // email que ya existe
+	    user.setPasswd("1234");
+
+	    // 2️⃣ Configuramos el mock para simular que el email ya existe
+	    UserEntity existingEntity = new UserEntity();
+	    existingEntity.setId(USER_ID);
+	    existingEntity.setEmail(USER_EMAIL);
+
+	    when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(existingEntity));
+
+	    // 3️⃣ Capturamos la excepción que se debería lanzar
+	    Throwable thrown = catchThrowable(() -> userDao.createUser(user));
+
+	    // 4️⃣ Validamos que sea la excepción correcta
+	    assertThat(thrown).isInstanceOf(EmailAlreadyExistsException.class)
+	                      .hasMessageContaining(USER_EMAIL);
+	}
 	@Test
 	void getUserById_test_success() {
 		//con esto le indico al mock del userRepository que cuando se haga un llamado al metodo findById
 		//con el dato USER_ID se devuelva el entity 
 		when(userRepository.findById(USER_ID)).thenReturn(Optional.of(getUserEntity_forTests()));
-		
 		//ahora hago el llamado al metodo que quiero probar
 		UserModel user = userDao.getUserById(USER_ID);
 		

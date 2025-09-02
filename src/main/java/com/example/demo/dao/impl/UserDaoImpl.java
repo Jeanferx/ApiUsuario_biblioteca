@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dao.UserDao;
 import com.example.demo.dao.jpa.entity.UserEntity;
 import com.example.demo.dao.jpa.repository.UserRepository;
+import com.example.demo.exception.EmailAlreadyExistsException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.UserModel;
 import java.util.List;
@@ -95,17 +96,27 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public UserModel createUser(UserModel user) {
-		UserEntity userEntity = new UserEntity();
-		userEntity.setDateOfBirth(user.getDateOfBirth());
-		userEntity.setName(user.getName());
-		userEntity.setEmail(user.getEmail());
-		userEntity.setPasswd(user.getPasswd());
-		
-		userEntity = repository.save(userEntity);
-		user.setId(userEntity.getId());
-		
-		return user;
+	    // 1️⃣ Verificar si el correo ya existe
+	    Optional<UserEntity> existingUser = repository.findByEmail(user.getEmail());
+	    if (existingUser.isPresent()) {
+	        throw new EmailAlreadyExistsException(
+	            "El correo " + user.getEmail() + " ya está registrado"
+	        );
+	    }
+
+	    // 2️⃣ Crear y guardar el usuario
+	    UserEntity userEntity = new UserEntity();
+	    userEntity.setDateOfBirth(user.getDateOfBirth());
+	    userEntity.setName(user.getName());
+	    userEntity.setEmail(user.getEmail());
+	    userEntity.setPasswd(user.getPasswd());
+
+	    userEntity = repository.save(userEntity);
+	    user.setId(userEntity.getId());
+
+	    return user;
 	}
+
 
 	public UserDaoImpl(UserRepository repository) {
 		this.repository = repository;
