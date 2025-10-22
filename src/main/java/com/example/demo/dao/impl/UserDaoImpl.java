@@ -1,10 +1,7 @@
 package com.example.demo.dao.impl;
-
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.dao.UserDao;
 import com.example.demo.dao.jpa.entity.UserEntity;
 import com.example.demo.dao.jpa.repository.UserRepository;
@@ -30,6 +27,7 @@ public class UserDaoImpl implements UserDao{
 			model.setName(e.get().getName());
 			model.setEmail(e.get().getEmail());
 			model.setPasswd(e.get().getPasswd());
+			model.setRol(e.get().getRol());
 		}else {
 			//Si no hay user entonces que lance una excepcion controlada de tipo UserNotFoundException
 			String errorMsg = "The user with id %s was not found";
@@ -46,6 +44,7 @@ public class UserDaoImpl implements UserDao{
 	        userEntity.setDateOfBirth(user.getDateOfBirth());
 	        userEntity.setEmail(user.getEmail());
 	        userEntity.setPasswd(user.getPasswd());
+	        userEntity.setRol(user.getRol());
 	        repository.save(userEntity);
 
 	        user.setId(userId);
@@ -66,6 +65,7 @@ public class UserDaoImpl implements UserDao{
             model.setName(e.getName());
             model.setEmail(e.getEmail());
             model.setPasswd(e.getPasswd());
+            model.setRol(e.getRol());
             models.add(model);
         }
         return models;
@@ -82,7 +82,7 @@ public class UserDaoImpl implements UserDao{
 	        userModel.setId(userEntity.getId());
 	        userModel.setName(userEntity.getName());
 	        userModel.setDateOfBirth(userEntity.getDateOfBirth());
-
+	        userModel.setRol(userEntity.getRol());
 	        repository.deleteById(userId);
 
 	        return userModel;
@@ -110,11 +110,14 @@ public class UserDaoImpl implements UserDao{
 	    userEntity.setName(user.getName());
 	    userEntity.setEmail(user.getEmail());
 	    userEntity.setPasswd(user.getPasswd());
-
+	    userEntity.setRol(user.getRol());
+	    
 	    userEntity = repository.save(userEntity);
-	    user.setId(userEntity.getId());
 
-	    return user;
+	    // Crear un UserModel “nuevo” solo con el ID, igual que postTransac
+	    UserModel model = new UserModel();
+	    model.setId(userEntity.getId());
+	    return model;
 	}
 
 

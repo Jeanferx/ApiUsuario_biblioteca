@@ -20,7 +20,6 @@ import java.util.List;
 
 
 import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -31,52 +30,46 @@ public class UserController {
 	@Autowired
 	private UserControllerMapper mapper;
 	//BUSCAR Y MOSTRAR TODOS LOS USUARIOS
+
+	
+	
 	@GetMapping
 	public List<UserModel> getAllUsers() {
 	    return userService.getAllUsers();
 	}
 
+	
+	
 	//BUSCAR Y MOSTRAR USUARIO
 	@GetMapping("/{userId}")
 	public UserModel getUserById(@PathVariable("userId") String userId) {
 		return userService.getUserById(userId);
 	}
+	
 
+	
+	
+	
 	//CREAR USUARIO
 	@PostMapping  // <- Ahora la ruta será POST /users (correcto)
 	public CreateUserResponseDTO createUser(@Valid @RequestBody CreateUserDTO user) {
 	    UserModel model = userService.createUser(mapper.dtoToModel(user));
 	    return mapper.modelToDto(model);
 	}
+	
+	
 	//EDITAR USUARIO
 	@PutMapping("/{userId}")
 	public UserModel updateUser(@PathVariable("userId") String userId, @RequestBody UserModel user) {
         return userService.updateUser(userId, user);
     }
+	
+	
+	
 	//ELIMINAR USUARIO
 	@DeleteMapping("/{userId}")
 	public UserModel deleteUser(@PathVariable("userId") String userId) {
 	    return userService.deleteUser(userId);
 	}
-
-
-
-	//GETTERS Y SETTERS ------------------- ES NECESARIO?
-	public UserService getUserService() {
-		return userService;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
-	public UserControllerMapper getMapper() {
-		return mapper;
-	}
-
-	public void setMapper(UserControllerMapper mapper) {
-		this.mapper = mapper;
-	}
-	
 	
 }

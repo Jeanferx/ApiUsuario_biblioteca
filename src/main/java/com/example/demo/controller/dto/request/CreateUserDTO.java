@@ -1,5 +1,4 @@
 package com.example.demo.controller.dto.request;
-
 import java.util.Date;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -25,14 +24,18 @@ public class CreateUserDTO {
 	@NotEmpty
 	@Size(max = 20)
 	private String passwd;
+	@NotEmpty
+	@Size(max = 20)
+	private String rol;
 	
 	public CreateUserDTO(){}
 	
-	public CreateUserDTO(String name, Date dateOfBirth, String email, String passwd) {
+	public CreateUserDTO(String name, Date dateOfBirth, String email, String passwd,String rol) {
 		this.name = name;
 		this.dateOfBirth = dateOfBirth;
 		this.email = email;
 		this.passwd = passwd;
+		this.rol = rol;
 	}
 	
 	
@@ -59,6 +62,12 @@ public class CreateUserDTO {
 	}
 	public void setPasswd(String passwd) {
 		this.passwd = passwd;
+	}
+	public String getRol() {
+		return rol;
+	}
+	public void setRol(String rol) {
+		this.rol = rol;
 	}
 	
 	

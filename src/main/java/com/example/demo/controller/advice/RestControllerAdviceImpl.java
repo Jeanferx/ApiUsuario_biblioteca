@@ -1,10 +1,8 @@
 package com.example.demo.controller.advice;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.demo.exception.EmailAlreadyExistsException;
 import com.example.demo.exception.ErrorMessage;
+import com.example.demo.exception.InvalidCredentialsException;
 import com.example.demo.exception.UserNotFoundException;
 
 @RestControllerAdvice
@@ -47,6 +46,11 @@ public class RestControllerAdviceImpl {
 	@ExceptionHandler({EmailAlreadyExistsException.class})
 	@ResponseStatus(HttpStatus.CONFLICT)
 	public ErrorMessage handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
+	    return new ErrorMessage(List.of(ex.getMessage()));
+	}
+	@ExceptionHandler({InvalidCredentialsException.class})
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public ErrorMessage handleInvalidCredentials(InvalidCredentialsException ex) {
 	    return new ErrorMessage(List.of(ex.getMessage()));
 	}
 

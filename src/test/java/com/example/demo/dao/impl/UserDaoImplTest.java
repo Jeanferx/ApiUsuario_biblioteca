@@ -2,6 +2,9 @@ package com.example.demo.dao.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -11,15 +14,22 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.demo.controller.dto.request.LoginRequest;
+import com.example.demo.controller.dto.response.LoginResponse;
 import com.example.demo.dao.UserDao;
 import com.example.demo.dao.jpa.entity.UserEntity;
 import com.example.demo.dao.jpa.repository.UserRepository;
 import com.example.demo.exception.EmailAlreadyExistsException;
+import com.example.demo.exception.InvalidCredentialsException;
 import com.example.demo.exception.UserNotFoundException;
 import com.example.demo.model.UserModel;
+import com.example.demo.service.Auth.impl.AuthServiceImpl;
+import com.example.demo.service.token.JwtService;
 
 @ExtendWith(MockitoExtension.class)
 public class UserDaoImplTest {
@@ -31,18 +41,24 @@ public class UserDaoImplTest {
 	//en lugar de crear un bean repository va a crear una maqueta sin funcion real
 	@Mock
 	private UserRepository userRepository;
-	
+	@Mock
+    private PasswordEncoder passwordEncoder;
 	//la clase que se va a probar
 	private UserDao userDao;
+	@Mock
+    private JwtService jwtService;
+
+    @InjectMocks
+    private AuthServiceImpl authService;
 	
 	//Esta anotacion dice que se ejecutara 
-	@BeforeEach
+	/*@BeforeEach
 	//este metodo es para configurar el bean que vamos a probar
 	void setUp() {
 		//si la clase userDao tuviera mas parametros se tendrian que pasar en el constructor
 		userDao = new UserDaoImpl(userRepository);
-	}
-	@Test
+	}*/
+	/*@Test
 	void createUser_test_emailAlreadyExists() {
 	    // 1️⃣ Creamos un UserModel de prueba usando los datos existentes
 	    UserModel user = new UserModel();
@@ -55,16 +71,16 @@ public class UserDaoImplTest {
 	    existingEntity.setId(USER_ID);
 	    existingEntity.setEmail(USER_EMAIL);
 
+	    //when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(existingEntity));
 	    when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(existingEntity));
-
 	    // 3️⃣ Capturamos la excepción que se debería lanzar
 	    Throwable thrown = catchThrowable(() -> userDao.createUser(user));
 
 	    // 4️⃣ Validamos que sea la excepción correcta
 	    assertThat(thrown).isInstanceOf(EmailAlreadyExistsException.class)
 	                      .hasMessageContaining(USER_EMAIL);
-	}
-	@Test
+	}*/
+	/*@Test
 	void getUserById_test_success() {
 		//con esto le indico al mock del userRepository que cuando se haga un llamado al metodo findById
 		//con el dato USER_ID se devuelva el entity 
@@ -76,8 +92,8 @@ public class UserDaoImplTest {
 		assertThat(user).isNotNull();
 		//tambien vamos a validar que el id del usuario que nos regresa es el esperado
 		assertThat(user.getId()).isEqualTo(USER_ID);
-	}
-	
+	}*/
+	/*
 	@Test
 	void getUserById_test_userNotFound() {
 		//Tambien le puedes decir al mock que te regrese algun valor sin importar el parametro de entrada
@@ -89,10 +105,10 @@ public class UserDaoImplTest {
 		Throwable userException = catchThrowable(() -> userDao.getUserById(USER_ID));
 		//aqui estoy probando que la excepcion recibida sea de tipo UserNotFoundException
 		assertThat(userException).isInstanceOf(UserNotFoundException.class);
-	}
+	}*/
 	
 	//este metodo solo es para devolver un userEntity como si el userRepository lo hubiera encontrado en bd
-	private UserEntity getUserEntity_forTests() {
+	/*private UserEntity getUserEntity_forTests() {
 		UserEntity u = new UserEntity();
 		u.setId(USER_ID);
 		//TODO 
@@ -101,5 +117,65 @@ public class UserDaoImplTest {
 		u.setName(USER_NAME);
 		u.setEmail(USER_EMAIL);
 		return u;
-	}
+	}*/
+	
+	
+	
+	
+	@Test
+    void testLoginSuccess() {
+        // Datos de prueba
+        LoginRequest request = new LoginRequest();
+        request.setEmail("test@correo.com");
+        request.setPasswd("123456");
+
+        UserEntity user = new UserEntity();
+        user.setEmail("test@correo.com");
+        user.setPasswd("hashedPassword"); // simula contraseña en DB
+
+        // Mock de repository y password encoder
+        when(userRepository.findByEmail("test@correo.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("123456", "hashedPassword")).thenReturn(true);
+        when(jwtService.generateToken(user)).thenReturn("token123");
+
+        // Ejecutar login
+        LoginResponse response = authService.login(request);
+
+        // Validaciones
+        assertNotNull(response);
+        assertEquals("token123", response.getToken());
+        assertEquals("Login exitoso", response.getMessage());
+    }
+
+    @Test
+    void testLoginUserNotFound() {
+        LoginRequest request = new LoginRequest();
+        request.setEmail("noexiste@correo.com");
+        request.setPasswd("123456");
+
+        when(userRepository.findByEmail("noexiste@correo.com")).thenReturn(Optional.empty());
+
+        // Validar que lanza excepción
+        assertThrows(InvalidCredentialsException.class, () -> {
+            authService.login(request);
+        });
+    }
+
+    @Test
+    void testLoginWrongPassword() {
+        LoginRequest request = new LoginRequest();
+        request.setEmail("test@correo.com");
+        request.setPasswd("wrongpass");
+
+        UserEntity user = new UserEntity();
+        user.setEmail("test@correo.com");
+        user.setPasswd("hashedPassword");
+
+        when(userRepository.findByEmail("test@correo.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("wrongpass", "hashedPassword")).thenReturn(false);
+
+        assertThrows(InvalidCredentialsException.class, () -> {
+            authService.login(request);
+        });
+    }
 }

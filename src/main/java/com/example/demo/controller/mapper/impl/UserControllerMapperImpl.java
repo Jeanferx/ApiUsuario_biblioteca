@@ -23,6 +23,7 @@ public class UserControllerMapperImpl implements UserControllerMapper {
 		model.setDateOfBirth(dto.getDateOfBirth());
 		model.setEmail(dto.getEmail());
 		model.setPasswd(dto.getPasswd());
+		model.setRol(dto.getRol());
 		return model;
 	}
 
@@ -32,7 +33,7 @@ public class UserControllerMapperImpl implements UserControllerMapper {
 			return null;
 		
 		CreateUserResponseDTO dto = new CreateUserResponseDTO();
-		dto.setId(model.getId());
+		dto.setId(dto.getId());
 		return dto;
 	}
 

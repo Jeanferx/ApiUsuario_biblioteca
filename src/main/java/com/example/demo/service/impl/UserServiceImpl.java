@@ -1,15 +1,10 @@
 package com.example.demo.service.impl;
-
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dao.UserDao;
-import com.example.demo.dao.jpa.entity.UserEntity;
-import com.example.demo.dao.jpa.repository.UserRepository;
 import com.example.demo.model.UserModel;
 import com.example.demo.service.UserService;
 import java.util.List;
@@ -36,7 +31,6 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional
 	public UserModel getUserById(String userId) {
-		UserModel userModel = new UserModel();
 		System.out.println("logica transladada al service");
 		System.out.println("Peticion de obtener el user con id " + userId);
 		
@@ -68,7 +62,6 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional
 	public UserModel deleteUser(String userId) {
-		UserModel userModel = new UserModel();
 	    System.out.println("Eliminando usuario con ID: " + userId);
 	    return userDao.deleteUser(userId);
 	}

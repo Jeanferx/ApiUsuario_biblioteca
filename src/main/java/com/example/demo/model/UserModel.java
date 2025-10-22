@@ -9,6 +9,7 @@ public class UserModel {
 	private Date dateOfBirth;
 	private String email;
 	private String passwd;
+	private String rol;
 	
 	public String getId() {
 		return id;
@@ -40,6 +41,11 @@ public class UserModel {
 	public void setPasswd(String passwd) {
 		this.passwd = passwd;
 	}
-	
+	public String getRol() {
+		return rol;
+	}
+	public void setRol(String rol) {
+		this.rol = rol;
+	}
 	
 }
