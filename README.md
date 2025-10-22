@@ -1,6 +1,4 @@
----
-
-## **README – ApiUsuario_biblioteca**
+**README – ApiUsuario_biblioteca**
 
 markdown
 # ApiUsuario_biblioteca
