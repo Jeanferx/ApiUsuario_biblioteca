@@ -2,7 +2,7 @@
 
 Este es un proyecto de ejemplo desarrollado con **Java 24**, **Spring Boot 3.5** y **Maven**, que implementa una API REST sencilla con operaciones CRUD.
 
-## 🛠 Tecnologías utilizadas
+## Tecnologías utilizadas
 
 - Java 24 (JDK)
 - Spring Boot 3.4.x
@@ -12,7 +12,7 @@ Este es un proyecto de ejemplo desarrollado con **Java 24**, **Spring Boot 3.5**
 - H2 Database (modo embebido para pruebas) - Pendiente de agregar
 - Lombok - Pendiente de agregar
 
-## 🚀 Cómo ejecutar el proyecto
+## Cómo ejecutar el proyecto
 
 1. Clona el repositorio:
    ```bash
