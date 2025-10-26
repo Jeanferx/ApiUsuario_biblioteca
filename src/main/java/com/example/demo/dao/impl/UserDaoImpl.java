@@ -73,21 +73,11 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public UserModel deleteUser(String userId) {
-		UserModel model = new UserModel();
-	    Optional<UserEntity> existingUser = repository.findById(userId);
-	    if (existingUser.isPresent()) {
-	        UserEntity userEntity = existingUser.get();
-
-	        UserModel userModel = new UserModel();
-	        userModel.setId(userEntity.getId());
-	        userModel.setName(userEntity.getName());
-	        userModel.setDateOfBirth(userEntity.getDateOfBirth());
-	        userModel.setRol(userEntity.getRol());
-	        repository.deleteById(userId);
-
-	        return userModel;
-	    }
-	    return null;
+		Optional<UserEntity> e=repository.findById(userId);
+		if(e.isPresent()) {
+			repository.deleteById(userId);
+		}
+		return null;
 	}
 
 
@@ -133,3 +123,20 @@ public class UserDaoImpl implements UserDao{
 		this.repository = repository;
 	}
 }
+
+/*
+ UserModel model = new UserModel();
+	    Optional<UserEntity> existingUser = repository.findById(userId);
+	    if (existingUser.isPresent()) {
+	        UserEntity userEntity = existingUser.get();
+
+	        UserModel userModel = new UserModel();
+	        userModel.setId(userEntity.getId());
+	        userModel.setName(userEntity.getName());
+	        userModel.setDateOfBirth(userEntity.getDateOfBirth());
+	        userModel.setRol(userEntity.getRol());
+	        repository.deleteById(userId);
+
+	        return userModel;
+	    }
+	    return null;*/
